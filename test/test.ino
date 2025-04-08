@@ -28,7 +28,7 @@ void setup()
     servoAngles[i] = defaultPositions[i];
     pwm.setPWM(servoPins[i], 0, angleToPulse(servoAngles[i]));
   }
-  servoMax(); // Set servos to minimum position
+  // servoMax(); // Set servos to minimum position
   delay(1000); // Wait for servos to reach minimum position
 }
 
