@@ -7,9 +7,9 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 const int servoCount = 2; // Number of servos you have
-const int servoPins[] = {3, 1};
+const int servoPins[] = {2, 0};
 
-double defaultPositions[servoCount] = {SERVO_1_POS[0], SERVO_2_POS[0]}; // Default position is when lid is open
+double defaultPositions[servoCount] = {SERVO_1_POS[60] + 27, SERVO_2_POS[60] + 27}; // Default position is when lid is open
 double servoAngles[servoCount]; // Array to store current servo angles
 
 bool isRotating = false; // Flag to track if rotation is in progress
@@ -23,11 +23,11 @@ void setup()
   pinMode(13, INPUT_PULLUP); // Pin for button press
 
   // Initialize servo angles to default positions
-  for (int i = 0; i < servoCount; i++)
-  {
-    servoAngles[i] = defaultPositions[i];
-    pwm.setPWM(servoPins[i], 0, myAngleToPulse(servoAngles[i], false, i));
-  }
+  // for (int i = 0; i < servoCount; i++)
+  // {
+  //   servoAngles[i] = defaultPositions[i];
+  //   pwm.setPWM(servoPins[i], 0, myAngleToPulse(servoAngles[i], false, i));
+  // }
   // servoMax(); // Set servos to minimum position
   setDefaultPositions();
   delay(1000); // Wait for servos to reach minimum position
@@ -35,8 +35,8 @@ void setup()
 
 void closeLid() {
   isRotating = true;
-  for (int i = 0; i < 100; i++) {
-    myMoveServo(0, 1, SERVO_1_POS[i], SERVO_2_POS[i], i);
+  for (int i = 60; i <= 97; i++) {
+    myMoveServo(0, 1, SERVO_1_POS[i] + 27, SERVO_2_POS[i] + 27, i);
     // moveServo(1, SERVO_2_POS[i]);
 
     // Serial.print("servo1:");
@@ -51,7 +51,7 @@ void closeLid() {
 
 void openLid() {
   isRotating = true;
-  for (int i = 99; i >= 0; i--) {
+  for (int i = 97; i >= 75; i--) {
     myMoveServo(0, 1, SERVO_1_POS[i], SERVO_2_POS[i], i);
     // moveServo(1, SERVO_2_POS[i]);
 
@@ -89,7 +89,8 @@ void loop()
   int buttonState = digitalRead(13);
   if (buttonState == LOW && !isRotating) {
     if (isAtZero) {
-      openLid();
+      // openLid();
+      setDefaultPositions();
       // servoMax();
     } else {
       closeLid();
@@ -101,9 +102,9 @@ void loop()
 
 void myMoveServo(int servoIndex_1, int servoIndex_2, double targetAngle_1, double targetAngle_2, int i)
 {
-      pwm.setPWM(servoPins[servoIndex_2], 0, myAngleToPulse(targetAngle_2, false, i));
-      pwm.setPWM(servoPins[servoIndex_1], 0, myAngleToPulse(targetAngle_1, true, i));
-      delay(15);
+      pwm.setPWM(servoPins[servoIndex_2], 0, myAngleToPulse(targetAngle_2 + 8, false, i));
+      pwm.setPWM(servoPins[servoIndex_1], 0, myAngleToPulse(targetAngle_1 + 6, true, i));
+      delay(100);
 }
 
 void moveServo(int servoIndex, int targetAngle)
@@ -119,9 +120,12 @@ void moveServo(int servoIndex, int targetAngle)
 
 void setDefaultPositions()
 {
+  isRotating = true;
   // Set all servos to their default positions
   myMoveServo(0, 1, defaultPositions[0], defaultPositions[1], 0);
+  delay(2000);
   Serial.println("Home");
+  isRotating = false;
 }
 
 double myAngleToPulse(double angle, bool debug, int i)

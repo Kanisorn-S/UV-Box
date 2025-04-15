@@ -7,7 +7,7 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 const int servoCount = 2; // Number of servos you have
-const int servoPins[] = {3, 1}; // 3 is lower servo
+const int servoPins[] = {2, 0}; // 2 is lower servo
 
 double defaultPositions[servoCount] = {SERVO_1_POS[0], SERVO_2_POS[0]}; // Default position is when lid is open
 double servoAngles[servoCount]; // Array to store current servo angles
@@ -32,6 +32,7 @@ void setup()
   }
   // servoMax(); // Set servos to minimum position
   setDefaultPositions();
+  Serial.println("Opened");
   delay(1000); // Wait for servos to reach minimum position
 }
 
@@ -39,7 +40,7 @@ void closeLid() {
   isRotating = true;
   for (int i = 0; i < 100; i++) {
     // myMoveServo(0, 1, SERVO_1_POS[i], SERVO_2_POS[i], i);
-    PWMMoveServo(0, 1, int(myAngleToPulse(SERVO_1_POS[i], false, i)), int(myAngleToPulse(SERVO_2_POS[i], false, i)), i);
+    PWMMoveServo(0, 1, int(myAngleToPulse(SERVO_1_POS[i] + 4, false, i)), int(myAngleToPulse(SERVO_2_POS[i] + 5, true, i)), i);
     // moveServo(1, SERVO_2_POS[i]);
 
     // Serial.print("servo1:");
@@ -56,7 +57,7 @@ void openLid() {
   isRotating = true;
   for (int i = 99; i >= 0; i--) {
     // myMoveServo(0, 1, SERVO_1_POS[i], SERVO_2_POS[i], i);
-    PWMMoveServo(0, 1, int(myAngleToPulse(SERVO_1_POS[i], false, i)), int(myAngleToPulse(SERVO_2_POS[i], false, i)), i);
+    PWMMoveServo(0, 1, int(myAngleToPulse(SERVO_1_POS[i] + 4, false, i)), int(myAngleToPulse(SERVO_2_POS[i] + 5, true, i)), i);
     // moveServo(1, SERVO_2_POS[i]);
 
     // Serial.print("servo1:");
@@ -168,7 +169,7 @@ void moveServo(int servoIndex, int targetAngle)
 void setDefaultPositions()
 {
   // Set all servos to their default positions
-  myMoveServo(0, 1, defaultPositions[0], defaultPositions[1], 0);
+  myMoveServo(0, 1, defaultPositions[0] + 4, defaultPositions[1] + 5, 0);
   Serial.println("Home");
 }
 
