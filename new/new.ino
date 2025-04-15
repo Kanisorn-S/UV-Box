@@ -7,7 +7,7 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 const int servoCount = 2; // Number of servos you have
-const int servoPins[] = {3, 1};
+const int servoPins[] = {3, 1}; // 3 is lower servo
 
 double defaultPositions[servoCount] = {SERVO_1_POS[0], SERVO_2_POS[0]}; // Default position is when lid is open
 double servoAngles[servoCount]; // Array to store current servo angles
