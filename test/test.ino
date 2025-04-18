@@ -7,9 +7,9 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 const int servoCount = 2; // Number of servos you have
-const int servoPins[] = {2, 0};
+const int servoPins[] = {0, 2}; // 0 is lower servo
 
-double defaultPositions[servoCount] = {SERVO_1_POS[60] + 27, SERVO_2_POS[60] + 27}; // Default position is when lid is open
+double defaultPositions[servoCount] = {SERVO_1_POS[50] - 20, SERVO_2_POS[50] - 20}; // Default position is when lid is open
 double servoAngles[servoCount]; // Array to store current servo angles
 
 bool isRotating = false; // Flag to track if rotation is in progress
@@ -35,8 +35,8 @@ void setup()
 
 void closeLid() {
   isRotating = true;
-  for (int i = 60; i <= 97; i++) {
-    myMoveServo(0, 1, SERVO_1_POS[i] + 27, SERVO_2_POS[i] + 27, i);
+  for (int i = 50; i <= 99; i++) {
+    myMoveServo(0, 1, SERVO_1_POS[i] - 20, SERVO_2_POS[i] - 20, i);
     // moveServo(1, SERVO_2_POS[i]);
 
     // Serial.print("servo1:");
